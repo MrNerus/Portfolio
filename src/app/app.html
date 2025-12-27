@@ -4,7 +4,6 @@
         <div class="hero-content">
             <h1 class="hero-title">{{ personalDetails.title }}</h1>
             <p class="hero-subtitle">{{ personalDetails.subtitle }}</p>
-            <!-- <p class="hero-subtitle">{{ personalDetails.description }}</p> -->
             <div class="scroll-indicator">
                 <span>Scroll to Launch</span>
                 <div class="arrow">↓</div>
@@ -34,7 +33,8 @@
             <h2 class="section-title">{{ section.title }}</h2>
             @for (event of section.events; track event.title; let eventIndex = $index) {
             <app-info [title]="event.title" [subtitle]="event.subtitle" [description]="event.description"
-                [image]="event.image" [tags]="event.tags" [index]="sectionIndex * 10 + eventIndex"></app-info>
+                [image]="event.image" [tags]="event.tags" [index]="sectionIndex * 10 + eventIndex"
+                [allowBodyInteraction]="event.allowBodyInteraction"></app-info>
             }
         </div>
         }
@@ -43,9 +43,15 @@
     <!-- Footer Section -->
     <footer class="footer">
         <div class="footer-content">
-            <h2>Ready to Collaborate?</h2>
-            <button class="hire-btn">Hire Me</button>
+            <button class="hire-btn" (click)="toggleReachOut()">Hire Me?</button>
+            <div class="reach-out" [class.visible]="showReachOut()">
+                @for (link of personalDetails.reachOutLinks; track link.name) {
+                <a [href]="link.url" target="_blank">
+                    <i class="material-icons">{{ link.icon }}</i>
+                    {{ link.name }}
+                </a>
+                }
+            </div>
         </div>
     </footer>
 </div>
-<router-outlet></router-outlet>

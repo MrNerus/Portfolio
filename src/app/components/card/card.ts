@@ -30,6 +30,7 @@ export class Card {
   description = input<string>();
   image = input<string>();
   tags = input<string[]>();
+  allowBodyInteraction = input<boolean>(false);
 
   moved = output<Point>();
 

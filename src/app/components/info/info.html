@@ -3,5 +3,6 @@
   <div class="node" #node></div>
   <app-svg-path [pathValue]="pathValue()" />
   <app-card [position]="cardState().position" [tilt]="smoothTilt()" [title]="title()" [subtitle]="subtitle()"
-    [description]="description()" [tags]="tags()" [image]="image()" (mousedown)="onMouseDown($event)" />
+    [description]="description()" [tags]="tags()" [image]="image()" (mousedown)="onMouseDown($event)"
+    [allowBodyInteraction]="allowBodyInteraction()" />
 </div>

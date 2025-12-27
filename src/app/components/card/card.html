@@ -19,14 +19,14 @@
       <h3 class="title">{{ title() }}</h3>
       }
       @if (subtitle()) {
-      <span class="subtitle">{{ subtitle() }}</span>
+      <span class="subtitle {{allowBodyInteraction() ? 'allow-interaction' : ''}}">{{ subtitle() }}</span>
       }
     </div>
     }
 
     <!-- Description -->
     @if (description()) {
-    <p class="description">{{ description() }}</p>
+    <p class="description {{allowBodyInteraction() ? 'allow-interaction' : ''}}">{{ description() }}</p>
     }
 
     <!-- Tags/Pills -->

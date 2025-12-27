@@ -35,6 +35,7 @@ export class Info implements AfterViewInit {
   image = input<string>();
   tags = input<string[]>();
   index = input<number>(0);
+  allowBodyInteraction = input<boolean>(false);
 
   cardState = signal<{ position: Point; tilt: number }>({
     position: { x: 0, y: 0 },
@@ -106,6 +107,13 @@ export class Info implements AfterViewInit {
     if (!this.cardComponent) {
       return;
     }
+    const target = event.target as HTMLElement;
+    // If the user clicks on text that allows interaction, don't start dragging
+    // and don't prevent default (so text selection works).
+    if (target.classList.contains('allow-interaction') || target.closest('.allow-interaction')) {
+      return;
+    }
+
     event.preventDefault();
     const cardPos = this.cardState().position;
     const offsetX = event.clientX - cardPos.x;

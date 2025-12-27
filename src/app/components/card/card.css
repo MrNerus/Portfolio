@@ -114,3 +114,10 @@
   color: #555;
   opacity: 0.5;
 }
+
+.allow-interaction.allow-interaction {
+  cursor: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  pointer-events: auto;
+}
