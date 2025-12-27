@@ -20,7 +20,7 @@ export class AppComponent {
           title: 'Surendra Ghimire',
           subtitle: '(Ard Nerus)',
           description: 'A passionate .Net developer',
-          image: '/assets/imgs/myFace.jpg',
+          image: 'assets/imgs/myFace.jpg',
           tags: ['.Net (c#)']
         },
         {
@@ -105,7 +105,7 @@ export class AppComponent {
           title: 'TransactEase',
           subtitle: 'Membership Card Management System',
           description: 'A membership card management system built using .Net Core and Angular. (username: admin, password: admin) for Forntend only PoC',
-          image: '/assets/imgs/transactEase.jpg',
+          image: 'assets/imgs/transactEase.jpg',
           tags: ['Github: https://github.com/MrNerus/TransactEase', 'Frontend Only PoC: https://transactease.neruxin.com/login']
         },
         {
@@ -145,7 +145,7 @@ export class AppComponent {
           title: 'Savana Sushi',
           subtitle: 'User Interface for Portuguese Restaurant',
           description: 'Client already had dedicated services for reservation, order management, etc. They needed centralized place to redirect to those services.',
-          image: '/assets/imgs/savanaSushi.jpg',
+          image: 'assets/imgs/savanaSushi.jpg',
           tags: ['Visit Website: https://savanasushiandgrill.com/']
         },
       ]
@@ -157,7 +157,7 @@ export class AppComponent {
           title: 'Music Player',
           subtitle: '',
           description: 'Too loud?',
-          image: '/assets/imgs/cursedMusicPlayer.jpg',
+          image: 'assets/imgs/cursedMusicPlayer.jpg',
           tags: ['Demo: https://mrnerus.github.io/cursedMusicPlayer/']
         },
       ]
@@ -168,8 +168,6 @@ export class AppComponent {
     title: 'Hi! I am Ard Nerus.',
     subtitle: 'Formally known as Surendra Ghimire.',
     description: 'Exploring the digital frontier, one pixel at a time.',
-    image: 'https://images.unsplash.com/photo-1511485977113-f34c92461ad9?q=80&w=2670&auto=format&fit=crop',
-    tags: ['Angular', 'React', 'TypeScript', 'JavaScript']
   };
 
   constructor() {
