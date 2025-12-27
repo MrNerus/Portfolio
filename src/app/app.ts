@@ -10,7 +10,7 @@ import { Info } from './components/info/info';
 })
 export class AppComponent {
   showCards: boolean = false;
-  rocketBottom = signal(10);
+  rocketBottom = signal(-20);
 
   timelineSections = [
     {
@@ -185,14 +185,18 @@ export class AppComponent {
   @HostListener('window:scroll', ['$event'])
   onScroll(event: Event) {
     const scrollPosition = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const docHeight = document.documentElement.scrollHeight;
 
-    const scrollPercent = scrollPosition / (docHeight - windowHeight);
+    // Config: How many pixels of scrolling it takes for the rocket to fly from bottom to top
+    const flightDistance = 1000; // Adjust this to make it faster/slower relative to scroll
 
-    const startBottom = 10;
-    const endBottom = 90;
-    const currentBottom = startBottom + (scrollPercent * (endBottom - startBottom));
+    // Map scroll 0 -> flightDistance to -20 -> 120
+    // Start at -20% (hidden below)
+    // End at 120% (hidden above)
+    const startPos = -20;
+    const endPos = 120;
+
+    const progress = Math.min(scrollPosition / flightDistance, 1);
+    const currentBottom = startPos + (progress * (endPos - startPos));
 
     this.rocketBottom.set(currentBottom);
   }

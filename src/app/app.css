@@ -80,7 +80,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
-    transition: bottom 0.1s linear;
+    /* transition: bottom 0.1s linear; */
     pointer-events: none;
 }
 
