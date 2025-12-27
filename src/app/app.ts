@@ -47,7 +47,7 @@ export class AppComponent {
         },
         {
           title: 'Contact',
-          subtitle: '+977 970-1428322',
+          subtitle: '',
           description: '+977 970-1428322, mr.ard.nerus@gmail.com',
           image: '',
           tags: [],
@@ -198,7 +198,7 @@ export class AppComponent {
       },
       {
         name: 'Download CV',
-        url: 'assets/pdf/cv.pdf',
+        url: 'assets/pdfs/cv.pdf',
         icon: 'download'
       }
     ]
