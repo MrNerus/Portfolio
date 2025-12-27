@@ -1,0 +1,48 @@
+<div class="box" [style]="boxStyles()" [class.grabbing]="isDragging()" #box>
+  <!-- Handle for dragging -->
+  <div class="handle">
+    <div class="handle-bar"></div>
+  </div>
+
+  <!-- Optional Image -->
+  @if (image()) {
+  <div class="image-container">
+    <img [src]="image()" alt="Card Image" class="card-image" />
+  </div>
+  }
+
+  <div class="content">
+    <!-- Header Section -->
+    @if (title() || subtitle()) {
+    <div class="header">
+      @if (title()) {
+      <h3 class="title">{{ title() }}</h3>
+      }
+      @if (subtitle()) {
+      <span class="subtitle">{{ subtitle() }}</span>
+      }
+    </div>
+    }
+
+    <!-- Description -->
+    @if (description()) {
+    <p class="description">{{ description() }}</p>
+    }
+
+    <!-- Tags/Pills -->
+    @if (tags(); as tagList) {
+    <div class="tags">
+      @for (tag of tagList; track tag) {
+      @if (isLabelUrl(tag)) {
+      <a class="tag" [href]="getUrl(tag)" target="_blank">{{ getLabel(tag) }}</a>
+      } @else {
+      <span class="tag">{{ tag }}</span>
+      }
+      }
+    </div>
+    }
+
+    <!-- Debug Info (Optional, can be removed or kept for dev) -->
+    <!-- <div class="info">x: {{ position().x }}, y: {{ position().y }}</div> -->
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="main-container">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to the Future</h1>
+            <p class="hero-subtitle">Exploring the digital frontier, one pixel at a time.</p>
+            <div class="scroll-indicator">
+                <span>Scroll to Launch</span>
+                <div class="arrow">↓</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rocket Parallax Container -->
+    <div class="rocket-container" [style.bottom.%]="rocketBottom()">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="rocket-icon">
+            <path
+                d="M12 2.5C12 2.5 15.5 6 16.5 10C17.5 14 16 17 16 17L12 15L8 17C8 17 6.5 14 7.5 10C8.5 6 12 2.5 12 2.5Z"
+                fill="#e11d48" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" />
+            <path d="M12 15V21" stroke="#fff" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M9 19L7 22" stroke="#fff" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M15 19L17 22" stroke="#fff" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="12" cy="9" r="2" fill="#fff" />
+        </svg>
+        <div class="rocket-flame"></div>
+    </div>
+
+    <!-- Timeline Section -->
+    <section class="timeline">
+        <div class="timeline-trunk"></div>
+        @for (section of timelineSections; track section.title; let sectionIndex = $index) {
+        <div class="timeline-section">
+            <h2 class="section-title">{{ section.title }}</h2>
+            @for (event of section.events; track event.title; let eventIndex = $index) {
+            <app-info [title]="event.title" [subtitle]="event.subtitle" [description]="event.description"
+                [image]="event.image" [tags]="event.tags" [index]="sectionIndex * 10 + eventIndex"></app-info>
+            }
+        </div>
+        }
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h2>Ready to Collaborate?</h2>
+            <button class="hire-btn">Hire Me</button>
+        </div>
+    </footer>
+</div>
+<router-outlet></router-outlet>

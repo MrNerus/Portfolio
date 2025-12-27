@@ -1,0 +1,175 @@
+import { Component, ElementRef, input, Renderer2, ViewChild, OnDestroy } from '@angular/core';
+
+@Component({
+  selector: 'app-card',
+  imports: [],
+  templateUrl: './card.html',
+  styleUrl: './card.css'
+})
+export class Card implements OnDestroy {
+  @ViewChild('box') box!: ElementRef;
+
+  prop = input.required<CardPropInterface>();
+  area!: ElementRef;
+
+  isDragging = false;
+  offsetX = 0;
+  offsetY = 0;
+
+  // velocity tracking
+  velocityX = 0;
+  velocityY = 0;
+  lastX = 0;
+  lastY = 0;
+  lastTime = 0;
+  inertiaFrame: number | null = null;
+
+  private moveListener?: () => void;
+  private upListener?: () => void;
+
+  constructor(private renderer: Renderer2) {}
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.setBoxPosition(0, 0);
+      this.area = this.prop().area;
+      this.renderer.appendChild(this.area.nativeElement, this.box.nativeElement);
+    });
+  }
+
+  ngOnDestroy() {
+    this.removeGlobalListeners();
+    if (this.inertiaFrame) cancelAnimationFrame(this.inertiaFrame);
+  }
+
+  setBoxPosition(x: number, y: number) {
+    const el = this.box.nativeElement;
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+  }
+
+  getBoxPosition() {
+    const el = this.box.nativeElement;
+    return {
+      x: parseFloat(el.style.left || '0'),
+      y: parseFloat(el.style.top || '0')
+    };
+  }
+
+  mouseDown(e: MouseEvent) {
+    e.preventDefault();
+    if (this.inertiaFrame) cancelAnimationFrame(this.inertiaFrame);
+
+    this.isDragging = true;
+    const boxRect = this.box.nativeElement.getBoundingClientRect();
+    this.offsetX = e.clientX - boxRect.left;
+    this.offsetY = e.clientY - boxRect.top;
+    this.box.nativeElement.style.cursor = 'grabbing';
+
+    this.lastX = e.clientX;
+    this.lastY = e.clientY;
+    this.lastTime = performance.now();
+
+    this.moveListener = this.renderer.listen('window', 'mousemove', (ev) => this.mouseMove(ev));
+    this.upListener = this.renderer.listen('window', 'mouseup', () => this.mouseUp());
+  }
+
+  mouseMove(e: MouseEvent) {
+    if (!this.isDragging) return;
+
+    const now = performance.now();
+    const dt = (now - this.lastTime) / 1000;
+
+    if (this.lastX - e.clientX < 0.001 || this.lastY - e.clientY < 0.001) {
+      const dx = e.clientX - this.lastX;
+      const dy = e.clientY - this.lastY;
+  
+      // Smoothed velocity
+      const alpha = 0.2; // smoothing factor
+      this.velocityX = (1 - alpha) * this.velocityX + alpha * (dx / dt);
+      this.velocityY = (1 - alpha) * this.velocityY + alpha * (dy / dt);
+  
+      this.lastX = e.clientX;
+      this.lastY = e.clientY;
+      this.lastTime = now;
+    }
+
+    const areaRect = this.area.nativeElement.getBoundingClientRect();
+    const boxRect = this.box.nativeElement.getBoundingClientRect();
+
+    let newX = e.clientX - areaRect.left - this.offsetX;
+    let newY = e.clientY - areaRect.top - this.offsetY;
+
+    newX = Math.max(0, Math.min(newX, areaRect.width - boxRect.width));
+    newY = Math.max(0, Math.min(newY, areaRect.height - boxRect.height));
+
+    this.setBoxPosition(newX, newY);
+  }
+
+  mouseUp() {
+    if (!this.isDragging) return;
+    this.isDragging = false;
+    this.box.nativeElement.style.cursor = 'grab';
+    this.removeGlobalListeners();
+
+    this.startInertia();
+  }
+
+  startInertia() {
+    const friction = 0.95; // smooth decay per frame
+    const stopThreshold = 10; // px/s to stop
+    const dt = 1 / 60; // ~16ms per frame
+
+    const step = () => {
+      const pos = this.getBoxPosition();
+      const areaRect = this.area.nativeElement.getBoundingClientRect();
+      const boxRect = this.box.nativeElement.getBoundingClientRect();
+
+      let newX = pos.x + this.velocityX * dt;
+      let newY = pos.y + this.velocityY * dt;
+
+      // bounce edges with damping
+      if (newX < 0) {
+        newX = 0;
+        this.velocityX *= -0.5;
+      } else if (newX > areaRect.width - boxRect.width) {
+        newX = areaRect.width - boxRect.width;
+        this.velocityX *= -0.5;
+      }
+
+      if (newY < 0) {
+        newY = 0;
+        this.velocityY *= -0.5;
+      } else if (newY > areaRect.height - boxRect.height) {
+        newY = areaRect.height - boxRect.height;
+        this.velocityY *= -0.5;
+      }
+
+      this.setBoxPosition(newX, newY);
+
+      // apply velocity decay
+      this.velocityX *= friction;
+      this.velocityY *= friction;
+
+      // stop when nearly still
+      if (Math.hypot(this.velocityX, this.velocityY) < stopThreshold) {
+        this.inertiaFrame = null;
+        return;
+      }
+
+      this.inertiaFrame = requestAnimationFrame(step);
+    };
+
+    this.inertiaFrame = requestAnimationFrame(step);
+  }
+
+  private removeGlobalListeners() {
+    if (this.moveListener) this.moveListener();
+    if (this.upListener) this.upListener();
+    this.moveListener = this.upListener = undefined;
+  }
+}
+
+export interface CardPropInterface {
+  area: ElementRef;
+}

@@ -1,0 +1,16 @@
+.container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.node {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 10px #fff, 0 0 20px var(--accent);
+    z-index: 20;
+}
